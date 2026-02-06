@@ -1,23 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wonderlust </title>
-</head>
-<body>
-    <h1>All listings</h1>
-<form action="/listing/new">
-    <button>Create new</button>
-</form>
-    <ul>
-        <% for(list of all) { %>
+<% layout("/layouts/boilerplate.ejs") %>
 
-            <li><a href="/listing/<%= list._id %>"><%= list.title %></a></li>
 
-            <% } %>
-    </ul>
 
-</body>
-</html>
+<div class="container mt-4">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
 
+<% for(let list of all) { %>
+
+<div class="col">
+
+  <a href="/listing/<%= list._id %>" class="text-decoration-none text-dark">
+
+    <div class="card h-100">
+
+      <img src="<%= list.image?.url %>" 
+           class="card-img-top" 
+           alt="listing_image"
+           style="height: 20rem; object-fit: cover;">
+            <div class="card-img-overlay"></div>
+
+      <div class="card-body">
+        <p class="card-text fw-bold"><%= list.title %></p>
+
+        <p class="text-muted">
+          ₹ <%= list.price.toLocaleString("en-IN") %> / night
+        </p>
+      </div>
+
+    </div>
+
+  </a>
+
+</div>
+
+<% } %>
+
+</div>
+</div>
+
+
+
+
+
+
+<!-- row-cols-lg-3 row-cols-md-3 row-cols-sm-3 -->
