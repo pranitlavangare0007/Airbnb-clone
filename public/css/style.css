@@ -85,3 +85,11 @@ font-weight: 400 !important;
     height: 30vh;
   
 }
+
+.all-para p{
+    color: #222222 !important;
+}
+
+.show-para p{
+    color: #222222 !important;
+}

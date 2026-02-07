@@ -1,16 +1,16 @@
 <% layout("/layouts/boilerplate.ejs") %>
 
-<div class="container mt-4">
+<div class="container mt-4 show-para">
 
   <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
 
       <h3 class="text-center mb-4">Listing Details</h3>
 
-      <div class="card shadow-sm">
+      <div class="card ">
 
         <!-- Image -->
-        <img src="<%= list.image %>" 
+        <img src="<%= list.image.url %>" 
              class="card-img-top show-img" 
              alt="listing_image">
 
