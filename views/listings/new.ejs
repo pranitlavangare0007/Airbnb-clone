@@ -6,16 +6,22 @@
 
       <h3 class="mb-3 text-center">Create A new listing</h3>
 
-      <form action="/listing" method="post">
+      <form action="/listing" method="post"  class="needs-validation" novalidate>
 
         <div class="mb-3">
             <label class="form-label">Title</label>
-            <input type="text" name="listing[title]" placeholder="Enter title" class="form-control">
+            <input type="text" name="listing[title]" placeholder="Enter title" class="form-control" required>
+             <div class="valid-feedback">
+      Title Looks good!
+    </div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Description</label>
-            <textarea name="listing[description]" class="form-control"></textarea>
+            <textarea name="listing[description]" class="form-control" required ></textarea>
+             <div class="invalid-feedback">
+      Please enter a short Description
+    </div>
         </div>
 
         <div class="mb-3">
@@ -25,17 +31,26 @@
 
         <div class="mb-3">
             <label class="form-label">Price</label>
-            <input type="number" name="listing[price]" placeholder="Enter price" class="form-control">
+            <input  name="listing[price]" placeholder="Enter price" class="form-control" required>
+            <div class="invalid-feedback">
+     Enter a valid price
+    </div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Location</label>
-            <input type="text" name="listing[location]" placeholder="Enter location" class="form-control">
+            <input type="text" name="listing[location]" placeholder="Enter location" class="form-control" required>
+            <div class="invalid-feedback">
+     Enter a valid locatin name
+    </div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Country</label>
-            <input type="text" name="listing[country]" placeholder="Enter country" class="form-control">
+            <input type="text" name="listing[country]" placeholder="Enter country" class="form-control" required>
+            <div class="invalid-feedback">
+     Enter a valid country name
+    </div>
         </div>
 
         <button class="btn btn-dark w-100 add-btn" >Add</button>
