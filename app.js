@@ -6,6 +6,7 @@ const Listing =require("./models/listing.js")
 const ejsMate= require('ejs-mate')
 const wrapAsync =require('./utils/WrapAsync.js')
 const expressErrors =require('./utils/ExpressErrors.js')
+const{listingSchema}=require("./schema.js")
 
 const port =8080
 const app=express();
@@ -20,6 +21,17 @@ mongoose.connect('mongodb://127.0.0.1:27017/wanderlust')
     console.log(err)
   });
 
+
+  let validate = (req,res,next)=>{
+     let {error}=listingSchema.validate(req.body)
+
+if(error){
+   let errMsg=error.details.map((el)=>el.message).join(",");
+   throw new expressErrors(400,errMsg)
+}else{
+   next()
+}
+  }
   
 app.get("/",(req,res)=>{
   
@@ -45,14 +57,16 @@ app.get("/listing/:id",async(req,res,next)=>{
    res.render("listings/show.ejs",{list})
 })
 
-app.post("/listing",wrapAsync(async(req,res)=>{
-  
+app.post("/listing",validate,wrapAsync(async(req,res)=>{
+
+
    const newListing=new Listing(req.body.listing)
    await newListing.save();
 
    res.redirect("/listing")
 
 }))
+
 
 app.get("/listing/:id/edit",async(req,res)=>{
     let {id}=req.params;
@@ -61,12 +75,12 @@ app.get("/listing/:id/edit",async(req,res)=>{
    res.render("listings/edit.ejs",{list})
 })
 
-app.put("/listing/:id",async(req,res)=>{
+app.put("/listing/:id",validate,wrapAsync(async(req,res)=>{
     let {id}=req.params;
     await Listing.findByIdAndUpdate(id,{...req.body.listing})
 
  res.redirect(`/listing/${id}`)
-})
+}))
 
 app.delete("/listing/:id",async(req,res)=>{
     let {id}=req.params;
@@ -100,8 +114,10 @@ app.use((req,res,next)=>{
 })
 
 app.use((err,req,res,next)=>{
-  let{statusCode,message}=err;
-  res.status(statusCode).send(message);
+  let{statusCode=500,message}=err;
+
+  res.status(statusCode).render("error.ejs",{message})
+//   res.status(statusCode).send(message);
 })
 
 app.listen(port,()=>{

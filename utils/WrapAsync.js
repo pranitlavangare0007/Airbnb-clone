@@ -1,5 +1,5 @@
 module.exports=(fn)=>{
-    return(res,req)=>{
+    return(req,res,next)=>{
         fn(req,res,next).catch(next)
     }
 }
