@@ -5,9 +5,9 @@
   <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
 
-      <h3 class="text-center mb-4">Listing Details</h3>
+      <h3 class="text-center mb-4"><%= list.title %></h3>
 
-      <div class="card ">
+      <div class="card listing-card">
 
         <!-- Image -->
         <img src="<%= list.image.url %>" 
@@ -18,7 +18,7 @@
         <div class="card-body">
 
           <!-- Title -->
-          <h4 class="card-title"><%= list.title %></h4>
+          
 
           <!-- Description -->
           <p class="card-text">
@@ -57,6 +57,45 @@
       </div>
 
     </div>
+  </div>
+
+  <div class="col-8 offset-3 mb-3">
+    <hr>
+    <h4>Leave a comment</h4>
+    <form action="/listing/<%= list._id %>/review" method="post"  class="needs-validation" novalidate>
+      <div class="mb-3 mt-3">
+        <label for="rating" class="form-label">Rating</label>
+        <input type="range" min="1" max="5" id="rating" name="review[rating]" class="form-range" >
+      </div>
+      <div class="mb-3 mt-3">
+        <label for="comment" class="form-label"> Comment</label>
+        <textarea name="review[comment]" id="comment" cols="30" rows="5" class="form-control" required></textarea>
+         <div class="invalid-feedback">
+      Please enter a review content
+    </div>
+      </div>
+      <button class="btn btn-outline-dark">Submit</button>
+    </form>
+
+    <hr>
+    <br>
+      <p><b>all reviews</b></p>
+<div class="row">
+    
+      <% for(review of list.reviews){ %>
+        <div class="card col-5 mb-3 ms-3">
+          <p><b>Pranit</b></p>
+      <p><%= review.rating %> stars</p>
+      <p><%= review.comment%></p>
+
+
+  <form action="/listing/<%= list._id %>/review/<%= review._id %>?_method=DELETE" class="mb-3" method="post">
+    <button class="btn btn-sm btn-danger">Delete</button>
+  </form>
+</div>
+  <% } %>
+</div>
+
   </div>
 
 </div>
