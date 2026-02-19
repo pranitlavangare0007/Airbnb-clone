@@ -8,6 +8,8 @@ const ejsMate= require('ejs-mate')
 const wrapAsync =require('./utils/WrapAsync.js')
 const expressErrors =require('./utils/ExpressErrors.js')
 const{listingSchema,reviewSchema}=require("./schema.js")
+const listing = require('./routes/listing.js')
+const review = require('./routes/review.js')
 
 const port =8080
 const app=express();
@@ -17,117 +19,33 @@ app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname,"public")))
 app.use(express.urlencoded({extended :true}))
 app.use(methodOverride("_method"));
+const cookieParser = require('cookie-parser')
 mongoose.connect('mongodb://127.0.0.1:27017/wanderlust')
   .then(() => console.log('Connected!')).catch((err)=>{
     console.log(err)
   });
 
+  
 
-  let validateListing = (req,res,next)=>{
-     let {error}=listingSchema.validate(req.body)
+app.use(cookieParser())
+app.get("/getCookie",(req,res)=>{
+   res.cookie("hii","pranit")
+   res.send("hellow")
+   
+})
 
-if(error){
-   let errMsg=error.details.map((el)=>el.message).join(",");
-   throw new expressErrors(400,errMsg)
-}else{
-   next()
-}
-  }
-
-
-   let validateReview = (req,res,next)=>{
-     let {error}=reviewSchema.validate(req.body)
-
-if(error){
-   let errMsg=error.details.map((el)=>el.message).join(",");
-   throw new expressErrors(400,errMsg)
-}else{
-   next()
-}
-  }
   
 app.get("/",(req,res)=>{
-  
+  console.log(req.cookies)
   res.send("root route")
 })
 
-app.get("/listing",async(req,res)=>{
-   const all = await Listing.find({})
+app.use("/listing",listing);
+app.use("/listing/:id/review",review);
 
-   res.render("listings/all.ejs",{all})
-})
-
-app.get("/listing/new",async(req,res)=>{
-  
-   res.render("listings/new.ejs")
-})
-
-
-app.get("/listing/:id",async(req,res,next)=>{
-    let {id}=req.params;
-   const list = await Listing.findById(id).populate("reviews")
-
-   res.render("listings/show.ejs",{list})
-})
-
-app.post("/listing",validateListing,wrapAsync(async(req,res)=>{
-
-
-   const newListing=new Listing(req.body.listing)
-   await newListing.save();
-
-   res.redirect("/listing")
-
-}))
-
-
-app.get("/listing/:id/edit",async(req,res)=>{
-    let {id}=req.params;
-   const list = await Listing.findById(id)
-
-   res.render("listings/edit.ejs",{list})
-})
-
-app.put("/listing/:id",validateListing,wrapAsync(async(req,res)=>{
-    let {id}=req.params;
-    await Listing.findByIdAndUpdate(id,{...req.body.listing})
-
- res.redirect(`/listing/${id}`)
-}))
-
-app.delete("/listing/:id",async(req,res)=>{
-    let {id}=req.params;
-    await Listing.findByIdAndDelete(id)
-
- res.redirect(`/listing`)
-})
 
 // add review
 
-app.post("/listing/:id/review", validateReview ,wrapAsync(async(req,res)=>{
-   let {id}=req.params;
-   let listing = await Listing.findById(id);
-   let newreview = new Review(req.body.review);
-
-   listing.reviews.push(newreview)
-  await newreview.save();
-  await listing.save();
-
- 
- res.redirect(`/listing/${id}`)
-}))
-
-//delete review
-
-app.delete("/listing/:id/review/:reviewId",wrapAsync(async(req,res)=>{
-   let{id,reviewId}=req.params;
-
-   await Listing.findByIdAndUpdate(id,{$pull:{reviews:reviewId}})
-
-   await Review.findByIdAndDelete(reviewId);
-   res.redirect(`/listing/${id}`);
-
-}))
 
 
 
