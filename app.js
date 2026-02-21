@@ -10,6 +10,8 @@ const expressErrors =require('./utils/ExpressErrors.js')
 const{listingSchema,reviewSchema}=require("./schema.js")
 const listing = require('./routes/listing.js')
 const review = require('./routes/review.js')
+const session =require('express-session')
+const flash =require('connect-flash')
 
 const port =8080
 const app=express();
@@ -26,13 +28,20 @@ mongoose.connect('mongodb://127.0.0.1:27017/wanderlust')
   });
 
   
+const sessionOption={
+  secret:"secretkru",
+   resave: false,
+  saveUninitialized: true,
+  cookie:{
+    expires:Date.now() + 1000*60*10,
+    maxAge:1000*60*10,
+    httpOnly:true,
 
-app.use(cookieParser())
-app.get("/getCookie",(req,res)=>{
-   res.cookie("hii","pranit")
-   res.send("hellow")
-   
-})
+  }
+}
+
+app.use(session(sessionOption))
+app.use(flash())
 
   
 app.get("/",(req,res)=>{
@@ -40,30 +49,15 @@ app.get("/",(req,res)=>{
   res.send("root route")
 })
 
+app.use((req,res,next)=>{
+  res.locals.success= req.flash("success")
+  res.locals.error= req.flash("error")
+  next();
+})
+
 app.use("/listing",listing);
 app.use("/listing/:id/review",review);
 
-
-// add review
-
-
-
-
-// app.get("/",(req,res)=>{
-//     res.send("hii")
-// })
-
-// app.get("/test",async(req,res)=>{
-//    let sample= new Listing({
-//   title: "Cozy Mountain Cabin",
-//   description: "A beautiful wooden cabin with scenic mountain views, perfect for a peaceful getaway.",
-//   price: 4500,
-//   location: "Manali",
-//   country: "India"
-//    })
-//    await sample.save();
-//    res.send("saved")
-// })
 
 app.use((req,res,next)=>{
    next(new expressErrors(404,"page not found"))
