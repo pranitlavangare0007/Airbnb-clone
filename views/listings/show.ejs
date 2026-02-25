@@ -18,7 +18,10 @@
         <div class="card-body">
 
           <!-- Title -->
-          
+           <p class="card-text">
+             Owned by   <i><%= list.owner.username %></i>
+          </p>
+
 
           <!-- Description -->
           <p class="card-text">
@@ -36,6 +39,8 @@
           </p>
 
           <!-- Buttons -->
+  <% if( currentUser && currentUser._id.equals(list.owner._id)) {%>
+        
           <div class="d-flex justify-content-between mt-3">
 
             <a href="/listing/<%= list._id %>/edit" 
@@ -51,7 +56,8 @@
             </form>
 
           </div>
-
+        
+<% } %>
         </div>
 
       </div>
@@ -84,7 +90,7 @@
     
       <% for(review of list.reviews){ %>
         <div class="card col-5 mb-3 ms-3">
-          <p><b>Pranit</b></p>
+          
       <p><%= review.rating %> stars</p>
       <p><%= review.comment%></p>
 
