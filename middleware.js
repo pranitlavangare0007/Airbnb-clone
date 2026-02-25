@@ -1,7 +1,7 @@
 const Listing =require('./models/listing.js')
 const{listingSchema,reviewSchema}=require("./schema.js")
 const expressErrors =require('./utils/ExpressErrors.js')
-
+const Review=require('./models/review.js')
 
 module.exports.isLoggedIn = (req,res,next)=>{
    
@@ -54,4 +54,19 @@ if(error){
      next()
   }
     }
+
+
+    
+module.exports.isAuthor = async(req,res,next)=>{
+    let {reviewId ,id}=req.params;
+
+    let review = await Review.findById(reviewId);
+    if( res.locals.currentUser && !review.author._id.equals(res.locals.currentUser._id)){
+      req.flash("error","you dont have permission to edit")
+     return res.redirect(`/listing/${id}`)
+    }
+    next()
+   
+}
+    
   
