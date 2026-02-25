@@ -7,9 +7,11 @@ const Review=require('./models/review.js')
 const ejsMate= require('ejs-mate')
 const wrapAsync =require('./utils/WrapAsync.js')
 const expressErrors =require('./utils/ExpressErrors.js')
-const{listingSchema,reviewSchema}=require("./schema.js")
-const listing = require('./routes/listing.js')
-const review = require('./routes/review.js')
+
+const listingRouter = require('./routes/listing.js')
+const reviewRouter = require('./routes/review.js')
+const userRouter = require('./routes/user.js')
+
 const session =require('express-session')
 const flash =require('connect-flash')
 const passport = require('passport')
@@ -24,7 +26,7 @@ app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname,"public")))
 app.use(express.urlencoded({extended :true}))
 app.use(methodOverride("_method"));
-const cookieParser = require('cookie-parser')
+
 mongoose.connect('mongodb://127.0.0.1:27017/wanderlust')
   .then(() => console.log('Connected!')).catch((err)=>{
     console.log(err)
@@ -54,10 +56,6 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
   
-app.get("/",(req,res)=>{
-  console.log(req.cookies)
-  res.send("root route")
-})
 
 app.use((req,res,next)=>{
   res.locals.success= req.flash("success")
@@ -65,20 +63,22 @@ app.use((req,res,next)=>{
   next();
 })
 
-app.get("/demo", async(req,res)=>{
+// app.get("/demo", async(req,res)=>{
 
- let fakeUser = new User({
-  email:"pranit@gmail.com",
-  username:"sigma"
- })
-  let registeredUser = await User.register(fakeUser,"123")
-  res.send(registeredUser)
+//  let fakeUser = new User({
+//   email:"pranit@gmail.com",
+//   username:"sigma"
+//  })
+//   let registeredUser = await User.register(fakeUser,"123")
+//   res.send(registeredUser)
 
-})
+// })
 
 
-app.use("/listing",listing);
-app.use("/listing/:id/review",review);
+app.use("/listing",listingRouter);
+app.use("/listing/:id/review",reviewRouter);
+app.use("/",userRouter);
+
 
 
 app.use((req,res,next)=>{
