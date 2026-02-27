@@ -2,10 +2,10 @@ const express = require('express')
 const mongoose =require('mongoose')
 const path = require('path');
 const methodOverride =require('method-override');
-const Listing =require("./models/listing.js")
-const Review=require('./models/review.js')
+
+
 const ejsMate= require('ejs-mate')
-const wrapAsync =require('./utils/WrapAsync.js')
+
 const expressErrors =require('./utils/ExpressErrors.js')
 
 const listingRouter = require('./routes/listing.js')
@@ -64,16 +64,6 @@ app.use((req,res,next)=>{
   next();
 })
 
-// app.get("/demo", async(req,res)=>{
-
-//  let fakeUser = new User({
-//   email:"pranit@gmail.com",
-//   username:"sigma"
-//  })
-//   let registeredUser = await User.register(fakeUser,"123")
-//   res.send(registeredUser)
-
-// })
 
 
 app.use("/listing",listingRouter);
