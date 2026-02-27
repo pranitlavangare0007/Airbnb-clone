@@ -1,7 +1,12 @@
+require('dotenv').config() // or import 'dotenv/config' if you're using ES6
+
+console.log(process.env.Name) 
+
 const express = require('express')
 const mongoose =require('mongoose')
 const path = require('path');
 const methodOverride =require('method-override');
+
 
 
 const ejsMate= require('ejs-mate')
@@ -25,6 +30,7 @@ app.set("views",path.join(__dirname,"views"));
 app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname,"public")))
 app.use(express.urlencoded({extended :true}))
+app
 app.use(methodOverride("_method"));
 
 mongoose.connect('mongodb://127.0.0.1:27017/wanderlust')
