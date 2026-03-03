@@ -1,3 +1,26 @@
+<style>
+  .btn-serach{
+    background-color: #fe424f ;
+    color: #fff;
+    border-radius: 25px;
+    padding: 0 1rem 0 1rem;
+    
+  }
+    .btn-serach:hover{
+    background-color: #fe424f ;
+    color: #fff;
+  }
+  .btn-serach i{
+    display: inline;
+    margin-right:0.5rem ;
+  }
+  .search-input{
+    border-radius: 25px;
+    padding: 0.5rem 3rem 0.5rem 3rem;
+    font-size: 1rem;
+  }
+</style>
+
 <nav class="navbar navbar-expand-lg bg-body-light border-bottom sticky-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="/listing"><i class="fa-regular fa-compass"></i></a>
@@ -9,6 +32,13 @@
        
         <a class="nav-link" href="/listing">Explore</a>
       
+      </div>
+
+      <div class="navbar-nav ms-auto">
+        <form class="d-flex" role="search">
+      <input class="form-control me-2 search-input" type="search" placeholder="Search destinations" aria-label="Search"/>
+      <button class="btn btn-serach" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+    </form>
       </div>
       <div class="navbar-nav ms-auto">
           <a class="nav-link" href="/listing/new">Airbnb your home</a>
