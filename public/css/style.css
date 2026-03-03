@@ -94,3 +94,8 @@ font-weight: 400 !important;
 .show-para p{
     color: #222222 !important;
 }
+
+#map{
+    height: 400px;
+    width:80vh;
+}

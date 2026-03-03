@@ -9,7 +9,7 @@
 
       <h3 class="mb-3 text-center">Edit your listing </h3>
 
-      <form action="/listing/<%= list._id %>?_method=PUT" method="post" novalidate class="needs-validation">
+      <form action="/listing/<%= list._id %>?_method=PUT" method="post" novalidate class="needs-validation" enctype="multipart/form-data">
 
         <div class="mb-3">
             <label class="form-label">Title</label>
@@ -27,12 +27,13 @@
     </div>
         </div>
 
+       <div>
+        <img src="<%= original%>" alt="">
+       </div>
+
         <div class="mb-3">
             <label class="form-label">Image</label>
-           <input type="text" name="listing[image][url]"value="<%= list.image.url %>" class="form-control" required>
-             <div class="invalid-feedback">
-      Please enter a valid url 
-    </div>
+           <input type="file" name="listing[image][url]" class="form-control" >
         </div>
 
         <div class="mb-3">
